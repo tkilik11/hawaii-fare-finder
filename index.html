@@ -115,6 +115,14 @@
   .hotel .hd .hp{color:var(--ink);font-weight:600}
   .fineprint{font-size:10.5px;color:var(--dim);margin-top:8px;line-height:1.5}
 
+  /* sliders */
+  .srow{margin-bottom:10px}
+  .srow .sl{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--mut);margin-bottom:4px}
+  .srow .sl .sv{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+  .srow input[type=range]{width:100%;accent-color:var(--accent);height:22px;cursor:pointer}
+  .sGrid{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px}
+  @media (max-width:520px){.sGrid{grid-template-columns:1fr}}
+
   .totalBar{position:sticky;bottom:-30px;margin:22px -30px -30px;padding:16px 30px calc(16px + env(safe-area-inset-bottom));background:rgba(13,18,25,.92);backdrop-filter:blur(10px);border-top:1px solid #263142;border-radius:0 0 22px 22px}
   @media (max-width:640px){.totalBar{margin:22px -20px -20px;padding:14px 20px calc(14px + env(safe-area-inset-bottom))}}
   .totalRow{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
@@ -179,14 +187,17 @@
       <div class="stepH"><span class="stepN">2</span><span class="stepT">Add Maui <span class="stepSub">— pick an island split (45-min nonstop hops)</span></span></div>
       <div class="splitGrid" id="mSplits"></div>
 
-      <div id="hotelWrap" style="display:none">
-        <div class="stepH" style="margin-top:18px"><span class="stepN">3</span><span class="stepT">Hotels <span class="stepSub">— 4★+ picks, tap to choose (indicative rates)</span></span></div>
+      <div id="hotelWrap">
+        <div class="stepH" style="margin-top:18px"><span class="stepN">3</span><span class="stepT">Hotels <span class="stepSub">— 4★+ picks, tap to choose (indicative base rates)</span></span></div>
         <div class="hotelCols">
           <div><div class="hotelLbl" id="wkLbl">Waikiki</div><div class="hotelList" id="mWk"></div></div>
-          <div><div class="hotelLbl" id="mauiLbl">Maui</div><div class="hotelList" id="mMaui"></div></div>
+          <div id="mauiCol"><div class="hotelLbl" id="mauiLbl">Maui</div><div class="hotelList" id="mMaui"></div></div>
         </div>
-        <div class="fineprint">Hotel estimates include ~20% for taxes &amp; resort fees. Live rates confirmed at booking.</div>
+        <div class="fineprint">Base nightly rates — resort fees &amp; hotel tax are itemised in extras below. Live rates confirmed at booking.</div>
       </div>
+
+      <div class="stepH" style="margin-top:18px"><span class="stepN">4</span><span class="stepT">Daily spend &amp; extras <span class="stepSub">— drag the sliders (2 adults, AUD)</span></span></div>
+      <div class="sGrid" id="mSliders"></div>
     </div>
 
     <div class="totalBar">
@@ -219,7 +230,57 @@ const MAUI = [
   {name:'Hyatt Regency Maui', stars:4, rating:4.5, ppn:973},
   {name:'Wailea Beach Resort · Marriott', stars:4, rating:4.6, ppn:1041},
 ];
-const FEE_PAD = 1.20;
+const TAX_RATE = 0.15;
+const CAR_DAY = 110;
+
+// daily spend & extras (couple, AUD) — persisted between visits
+const EXP_DEF = [
+  {id:'food',      label:'Food & drinks',          per:'day',   min:60, max:400,  step:10, def:180},
+  {id:'act',       label:'Activities & tours',     per:'day',   min:0,  max:300,  step:10, def:80},
+  {id:'resort',    label:'Resort fees',            per:'night', min:0,  max:90,   step:5,  def:50},
+  {id:'cardays',   label:'Rental car days',        per:'trip',  min:0,  max:16,   step:1,  def:null},
+  {id:'transfers', label:'Airport transfers (rtn)',per:'trip',  min:0,  max:400,  step:10, def:150},
+  {id:'insurance', label:'Travel insurance',       per:'trip',  min:0,  max:600,  step:10, def:250},
+  {id:'buffer',    label:'Extras / shopping buffer',per:'trip', min:0,  max:1000, step:50, def:300},
+];
+let EXPV = {};
+try{ EXPV = JSON.parse(localStorage.getItem('hawaii-exp')||'{}'); }catch(e){}
+EXP_DEF.forEach(s=>{ if(typeof EXPV[s.id]!=='number') EXPV[s.id] = s.def; });
+function saveEXP(){ try{ localStorage.setItem('hawaii-exp', JSON.stringify(EXPV)); }catch(e){} }
+
+function buildSliders(){
+  const el=document.getElementById('mSliders');
+  el.innerHTML = EXP_DEF.map(s=>`
+    <div class="srow">
+      <div class="sl"><span>${s.label}</span><span class="sv" id="sv-${s.id}"></span></div>
+      <input type="range" id="sl-${s.id}" min="${s.min}" max="${s.max}" step="${s.step}" aria-label="${s.label}">
+    </div>`).join('');
+  EXP_DEF.forEach(s=>{
+    const inp=document.getElementById('sl-'+s.id);
+    inp.addEventListener('input',()=>{ EXPV[s.id]=+inp.value; paintSlider(s); if(cur) renderTotal(); });
+    inp.addEventListener('change',saveEXP);
+  });
+}
+function paintSlider(s){
+  const v=EXPV[s.id];
+  const inp=document.getElementById('sl-'+s.id);
+  if(inp && +inp.value!==v) inp.value=v;
+  const lbl=document.getElementById('sv-'+s.id);
+  if(!lbl) return;
+  if(s.id==='cardays'){ lbl.textContent=`${v}d × ${money(CAR_DAY)}`; }
+  else if(s.per==='day'){ lbl.textContent=`${money(v)}/day`; }
+  else if(s.per==='night'){ lbl.textContent=`${money(v)}/night`; }
+  else { lbl.textContent=money(v); }
+}
+function syncCarDays(){
+  const s=EXP_DEF.find(x=>x.id==='cardays');
+  s.max = cur.nights;
+  const deflt = curSplit ? curSplit.maui : Math.min(2,cur.nights);
+  EXPV.cardays = Math.min(EXPV.cardays==null?deflt:EXPV.cardays, cur.nights);
+  if(EXPV.cardays==null || EXPV._cell!==cur.dep+cur.ret){ EXPV.cardays=deflt; EXPV._cell=cur.dep+cur.ret; }
+  const inp=document.getElementById('sl-cardays'); if(inp) inp.max=cur.nights;
+  paintSlider(s);
+}
 
 const DEPS = ['2026-12-21','2026-12-22','2026-12-23','2026-12-24','2026-12-25','2026-12-26'];
 const RETS = ['2027-01-01','2027-01-02','2027-01-03','2027-01-04','2027-01-05','2027-01-06','2027-01-07','2027-01-08'];
@@ -355,45 +416,52 @@ function renderSplits(){
   el.querySelectorAll('.splitCard').forEach(b=>b.addEventListener('click',()=>{
     const o=opts[+b.dataset.i];
     curSplit = o.kind==='oahu' ? null : o;
-    document.getElementById('hotelWrap').style.display = curSplit ? 'block':'none';
-    if(curSplit){
-      document.getElementById('wkLbl').textContent = `Waikiki · ${curSplit.wk} nights`;
-      document.getElementById('mauiLbl').textContent = `Maui · ${curSplit.maui} nights`;
-      renderHotels();
-    }
-    renderSplits(); renderTotal();
+    document.getElementById('mauiCol').style.display = curSplit ? 'block':'none';
+    const wkN = curSplit ? curSplit.wk : cur.nights;
+    document.getElementById('wkLbl').textContent = `Waikiki · ${wkN} nights`;
+    if(curSplit) document.getElementById('mauiLbl').textContent = `Maui · ${curSplit.maui} nights`;
+    renderHotels(); renderSplits(); syncCarDays(); renderTotal();
   }));
 }
 
 function renderHotels(){
-  const mk=(list,selIdx,isWk)=>list.map((h,i)=>{
-    const nts = isWk?curSplit.wk:curSplit.maui;
-    return `<button class="hotel${i===selIdx?' sel':''}" data-i="${i}" data-wk="${isWk?1:0}">
+  const mk=(list,selIdx,nts)=>list.map((h,i)=>{
+    return `<button class="hotel${i===selIdx?' sel':''}" data-i="${i}" data-wk="${nts===undefined?0:1}">
       <div class="hn">${h.name} <span style="color:var(--dim);font-weight:400">${'★'.repeat(h.stars)}</span></div>
       <div class="hd"><span>${h.rating} rating</span><span class="hp">${money(h.ppn)}/n · ${money(h.ppn*nts)}</span></div>
     </button>`;
   }).join('');
   const wkEl=document.getElementById('mWk'), mauiEl=document.getElementById('mMaui');
-  wkEl.innerHTML=mk(WAIKIKI,selWk,true);
-  mauiEl.innerHTML=mk(MAUI,selMaui,false);
+  const wkN = curSplit?curSplit.wk:cur.nights;
+  wkEl.innerHTML=mk(WAIKIKI,selWk,wkN);
+  mauiEl.innerHTML=curSplit?mk(MAUI,selMaui,curSplit.maui):'';
   wkEl.querySelectorAll('.hotel').forEach(b=>b.addEventListener('click',()=>{selWk=+b.dataset.i;renderHotels();renderTotal();}));
   mauiEl.querySelectorAll('.hotel').forEach(b=>b.addEventListener('click',()=>{selMaui=+b.dataset.i;renderHotels();renderTotal();}));
 }
 
 function renderTotal(){
-  let airPP = cur.price, parts=[`Flights ${money(cur.price*2)}`];
+  const n=cur.nights;
+  let airPP=cur.price; const parts=[`flights ${money(cur.price*2)}`];
+  let wkN=n, mauiN=0;
   if(curSplit){
-    airPP += curSplit.hopOut.price + curSplit.hopBack.price;
+    airPP+=curSplit.hopOut.price+curSplit.hopBack.price;
     parts.push(`hops ${money((curSplit.hopOut.price+curSplit.hopBack.price)*2)}`);
-    const hotel = (WAIKIKI[selWk].ppn*curSplit.wk + MAUI[selMaui].ppn*curSplit.maui) * FEE_PAD;
-    parts.push(`hotels ${money(hotel)}`);
-    document.getElementById('totL').textContent='Estimated trip · 2 adults';
-    document.getElementById('totV').textContent=money(airPP*2 + hotel);
-  }else{
-    document.getElementById('totL').textContent='Flights · 2 adults';
-    document.getElementById('totV').textContent=money(cur.price*2);
+    wkN=curSplit.wk; mauiN=curSplit.maui;
   }
-  document.getElementById('totB').textContent = parts.join('  +  ');
+  const hotelBase=WAIKIKI[selWk].ppn*wkN + (curSplit?MAUI[selMaui].ppn*mauiN:0);
+  const resort=EXPV.resort*n;
+  const tax=hotelBase*TAX_RATE;
+  const daily=(EXPV.food+EXPV.act)*n;
+  const car=CAR_DAY*(EXPV.cardays||0);
+  const extras=EXPV.transfers+EXPV.insurance+EXPV.buffer;
+  const total=airPP*2+hotelBase+resort+tax+daily+car+extras;
+  parts.push(`hotels ${money(hotelBase+resort+tax)}`);
+  parts.push(`food+activities ${money(daily)}`);
+  if(car) parts.push(`car ${money(car)}`);
+  parts.push(`extras ${money(extras)}`);
+  document.getElementById('totL').textContent='Estimated total trip · 2 adults';
+  document.getElementById('totV').textContent=money(total);
+  document.getElementById('totB').textContent=parts.join('  +  ');
 }
 
 const overlay=document.getElementById('overlay');
@@ -412,8 +480,9 @@ function openModal(key){
     : 'Best under-3h-layover option home that day — exact pairing chosen at booking:';
   document.getElementById('mRet').innerHTML = opt ? legHTML(opt.legs,opt.layovers) : '<div class="retNote">See live options via the link below.</div>';
   document.getElementById('mLink').href=c.google;
-  document.getElementById('hotelWrap').style.display='none';
-  renderSplits(); renderTotal();
+  document.getElementById('mauiCol').style.display='none';
+  document.getElementById('wkLbl').textContent = `Waikiki · ${c.nights} nights`;
+  renderSplits(); renderHotels(); syncCarDays(); renderTotal();
   overlay.classList.add('open');
   document.body.style.overflow='hidden';
 }
@@ -422,6 +491,8 @@ grid.addEventListener('click',e=>{const b=e.target.closest('button.cell');if(b)o
 document.getElementById('closeBtn').addEventListener('click',closeModal);
 overlay.addEventListener('click',e=>{if(e.target===overlay)closeModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+buildSliders();
+EXP_DEF.forEach(paintSlider);
 </script>
 </body>
 </html>
