@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Hawaii · Christmas &amp; New Year — fare finder</title>
+<title>Hawaii · Christmas &amp; New Year — trip builder</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -63,13 +63,13 @@
   /* modal */
   .overlay{position:fixed;inset:0;background:rgba(4,7,11,.66);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}
   .overlay.open{display:flex}
-  .modal{background:linear-gradient(180deg,#131a24,#0e141d);border:1px solid #263142;border-radius:22px;max-width:560px;width:100%;max-height:88vh;overflow-y:auto;padding:clamp(20px,3vw,30px);box-shadow:0 40px 100px -20px rgba(0,0,0,.8);animation:pop .22s cubic-bezier(.2,.9,.3,1.2)}
+  .modal{background:linear-gradient(180deg,#131a24,#0e141d);border:1px solid #263142;border-radius:22px;max-width:600px;width:100%;max-height:88vh;overflow-y:auto;padding:clamp(20px,3vw,30px);box-shadow:0 40px 100px -20px rgba(0,0,0,.8);animation:pop .22s cubic-bezier(.2,.9,.3,1.2)}
   @keyframes pop{from{transform:translateY(14px) scale(.98);opacity:0}to{transform:none;opacity:1}}
   @media (prefers-reduced-motion:reduce){.modal{animation:none}button.cell{transition:none}}
   .m-eyebrow{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--mut);font-weight:600}
   .m-title{font-family:var(--font-display);font-size:clamp(22px,3vw,28px);font-weight:600;margin:6px 0 2px}
   .m-nights{color:var(--mut);font-size:13px;margin-bottom:14px}
-  .priceRow{display:flex;gap:10px;margin-bottom:18px}
+  .priceRow{display:flex;gap:10px;margin-bottom:6px}
   .priceBox{flex:1;background:#0b1017;border:1px solid var(--line);border-radius:14px;padding:12px 14px}
   .priceBox .l{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);font-weight:600}
   .priceBox .v{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px}
@@ -87,10 +87,44 @@
   .route .dur{font-size:10px;letter-spacing:.06em}
   .layover{text-align:center;font-size:11px;color:var(--mid);padding:6px 0 2px}
   .retNote{font-size:11px;color:var(--dim);margin:-2px 0 8px}
-  .cta{display:block;text-align:center;text-decoration:none;background:#fff;color:#0a0e13;font-weight:700;font-size:14.5px;border-radius:14px;padding:14px;margin-top:18px;transition:transform .15s ease, box-shadow .15s ease}
+
+  /* trip builder */
+  .builder{margin-top:20px;border-top:1px dashed #263142;padding-top:16px}
+  .stepH{display:flex;align-items:baseline;gap:10px;margin:0 0 10px}
+  .stepN{width:22px;height:22px;border-radius:50%;background:#182130;border:1px solid #263142;color:var(--accent);font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex:none}
+  .stepT{font-size:13px;font-weight:700}
+  .stepSub{font-size:11px;color:var(--dim);font-weight:400}
+  .splitGrid{display:grid;gap:8px}
+  .splitCard{border:1px solid var(--line);background:#0b1017;border-radius:14px;padding:11px 13px;cursor:pointer;display:block;width:100%;text-align:left;color:var(--ink);font-family:var(--font-ui);transition:border-color .15s ease, background .15s ease}
+  .splitCard:hover{border-color:#334157}
+  .splitCard.sel{border-color:var(--accent);background:#101824}
+  .splitCard .row1{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .splitCard .name{font-size:13px;font-weight:600}
+  .splitCard .tag{font-size:10px;color:var(--mid);font-weight:600;letter-spacing:.04em}
+  .splitCard .price{font-size:12.5px;font-weight:700;color:var(--good);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .splitCard .det{font-size:11px;color:var(--mut);margin-top:5px;line-height:1.55;font-variant-numeric:tabular-nums}
+  .hotelCols{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media (max-width:520px){.hotelCols{grid-template-columns:1fr}}
+  .hotelList{display:flex;flex-direction:column;gap:6px}
+  .hotelLbl{font-size:11px;color:var(--mut);font-weight:600;margin-bottom:2px}
+  .hotel{border:1px solid var(--line);background:#0b1017;border-radius:12px;padding:9px 11px;cursor:pointer;width:100%;text-align:left;color:var(--ink);font-family:var(--font-ui);transition:border-color .15s ease}
+  .hotel:hover{border-color:#334157}
+  .hotel.sel{border-color:var(--accent);background:#101824}
+  .hotel .hn{font-size:12px;font-weight:600;line-height:1.3}
+  .hotel .hd{display:flex;justify-content:space-between;font-size:11px;color:var(--mut);margin-top:3px;font-variant-numeric:tabular-nums}
+  .hotel .hd .hp{color:var(--ink);font-weight:600}
+  .fineprint{font-size:10.5px;color:var(--dim);margin-top:8px;line-height:1.5}
+
+  .totalBar{position:sticky;bottom:-30px;margin:22px -30px -30px;padding:16px 30px calc(16px + env(safe-area-inset-bottom));background:rgba(13,18,25,.92);backdrop-filter:blur(10px);border-top:1px solid #263142;border-radius:0 0 22px 22px}
+  @media (max-width:640px){.totalBar{margin:22px -20px -20px;padding:14px 20px calc(14px + env(safe-area-inset-bottom))}}
+  .totalRow{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  .totalL{font-size:12px;color:var(--mut);font-weight:600}
+  .totalV{font-size:clamp(22px,3vw,27px);font-weight:700;color:var(--good);font-variant-numeric:tabular-nums}
+  .totalBreak{font-size:11px;color:var(--dim);margin-top:4px;font-variant-numeric:tabular-nums}
+  .cta{display:block;text-align:center;text-decoration:none;background:#fff;color:#0a0e13;font-weight:700;font-size:14.5px;border-radius:14px;padding:14px;margin-top:14px;transition:transform .15s ease, box-shadow .15s ease}
   .cta:hover{transform:translateY(-2px);box-shadow:0 12px 30px -8px rgba(255,255,255,.25)}
   .m-fine{font-size:11px;color:var(--dim);text-align:center;margin-top:10px;line-height:1.5}
-  .close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:#0b1017;color:var(--mut);font-size:16px;cursor:pointer;line-height:1}
+  .close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:#0b1017;color:var(--mut);font-size:16px;cursor:pointer;line-height:1;z-index:2}
   .close:hover{color:var(--ink);border-color:#334157}
   @media (max-width:640px){
     .overlay{align-items:flex-end;padding:0}
@@ -105,7 +139,7 @@
   <header>
     <div class="eyebrow">Melbourne ⇄ Honolulu · December 2026 → January 2027</div>
     <h1>Pick our Hawaii dates</h1>
-    <p class="sub">Every square is the <b>cheapest good flight</b> for that date pair — one short stop in Sydney, every layover under 3 hours, Qantas or better. <b>Tap a price</b> to see the actual flights and a live booking link. Two adults, economy.</p>
+    <p class="sub">Every square is the <b>cheapest good flight</b> for that date pair — one short stop in Sydney, every layover under 3 hours, Qantas or better. <b>Tap a price</b> to see the flights, add Maui, and build the full trip cost. Two adults, economy.</p>
   </header>
 
   <div class="panel">
@@ -116,16 +150,16 @@
       <span class="lab" id="legMin"></span>
       <div class="bar"></div>
       <span class="lab" id="legMax"></span>
-      <span class="lab" style="color:var(--dim)">per person · return · AUD</span>
+      <span class="lab" style="color:var(--dim)">flights per person · return · AUD</span>
     </div>
     <div class="notes">
       <div class="note"><b>No nonstops exist anymore.</b> Qantas axed MEL–Honolulu in Jan 2026 — one stop via Sydney is the most direct route left.</div>
-      <div class="note"><b>Maui is easy.</b> 45-min nonstop island hops (HNL⇄OGG) on Southwest run ~A$220 pp return — add on top of any square.</div>
-      <div class="note"><b>Fares are live</b> as of 12 Aug and move. The link in each square shows the exact current price on Google Flights.</div>
+      <div class="note"><b>Maui is built in.</b> Tap any square, then choose an island split — 45-min nonstop hops on Southwest with real times and prices.</div>
+      <div class="note"><b>Fares are live</b> as of 12 Aug and move. Hotel rates are indicative — the Google Flights link shows exact current airfares.</div>
     </div>
   </div>
 
-  <footer>Christmas in Waikiki, New Year on Maui 🌺 — built by Hermes</footer>
+  <footer>Christmas in Waikiki, New Year somewhere warm — built by Hermes</footer>
 </div>
 
 <div class="overlay" id="overlay" role="dialog" aria-modal="true">
@@ -134,33 +168,71 @@
     <div class="m-eyebrow" id="mEyebrow"></div>
     <div class="m-title" id="mTitle"></div>
     <div class="m-nights" id="mNights"></div>
-    <div class="priceRow">
-      <div class="priceBox"><div class="l">Per person</div><div class="v" id="mPP"></div></div>
-      <div class="priceBox couple"><div class="l">Two of us</div><div class="v" id="mCouple"></div></div>
-    </div>
-    <div class="legSec">Fly there · <span id="mOutDate"></span></div>
+
+    <div class="legSec">1 · Fly there — <span id="mOutDate"></span></div>
     <div id="mOut"></div>
-    <div class="legSec">Fly home · <span id="mRetDate"></span></div>
+    <div class="legSec">Fly home — <span id="mRetDate"></span></div>
     <div class="retNote" id="mRetNote"></div>
     <div id="mRet"></div>
-    <a class="cta" id="mLink" href="#" target="_blank" rel="noopener">See this fare on Google Flights →</a>
-    <div class="m-fine">Opens the exact search with these dates — live price, both directions, book from there.</div>
+
+    <div class="builder">
+      <div class="stepH"><span class="stepN">2</span><span class="stepT">Add Maui <span class="stepSub">— pick an island split (45-min nonstop hops)</span></span></div>
+      <div class="splitGrid" id="mSplits"></div>
+
+      <div id="hotelWrap" style="display:none">
+        <div class="stepH" style="margin-top:18px"><span class="stepN">3</span><span class="stepT">Hotels <span class="stepSub">— 4★+ picks, tap to choose (indicative rates)</span></span></div>
+        <div class="hotelCols">
+          <div><div class="hotelLbl" id="wkLbl">Waikiki</div><div class="hotelList" id="mWk"></div></div>
+          <div><div class="hotelLbl" id="mauiLbl">Maui</div><div class="hotelList" id="mMaui"></div></div>
+        </div>
+        <div class="fineprint">Hotel estimates include ~20% for taxes &amp; resort fees. Live rates confirmed at booking.</div>
+      </div>
+    </div>
+
+    <div class="totalBar">
+      <div class="totalRow"><span class="totalL" id="totL">Flights · 2 adults</span><span class="totalV" id="totV"></span></div>
+      <div class="totalBreak" id="totB"></div>
+      <a class="cta" id="mLink" href="#" target="_blank" rel="noopener">See these flights on Google Flights →</a>
+      <div class="m-fine">Opens the exact date search — live price, book from there. Hops are on Southwest.com.</div>
+    </div>
   </div>
 </div>
 
 <script>
 const DATA = {"cells": {"2026-12-21_2027-01-01": {"dep": "2026-12-21", "ret": "2027-01-01", "nights": 11, "price": 2491, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-21T16:00:00", "arr": "2026-12-21T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-21T20:10:00", "arr": "2026-12-21T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjFqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wMWoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-22_2027-01-01": {"dep": "2026-12-22", "ret": "2027-01-01", "nights": 10, "price": 2987, "outLegs": [{"airline": "UA", "airlineName": "United", "from": "MEL", "to": "LAX", "dep": "2026-12-22T11:30:00", "arr": "2026-12-22T06:55:00"}, {"airline": "UA", "airlineName": "United", "from": "LAX", "to": "HNL", "dep": "2026-12-22T09:00:00", "arr": "2026-12-22T13:06:00"}], "outLayovers": [{"min": 125, "at": "LAX"}], "outDuration": 1356, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjJqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wMWoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-23_2027-01-01": {"dep": "2026-12-23", "ret": "2027-01-01", "nights": 9, "price": 2491, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-23T16:00:00", "arr": "2026-12-23T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-23T20:10:00", "arr": "2026-12-23T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjNqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wMWoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-21_2027-01-02": {"dep": "2026-12-21", "ret": "2027-01-02", "nights": 12, "price": 2600, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-21T16:00:00", "arr": "2026-12-21T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-21T20:10:00", "arr": "2026-12-21T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjFqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wMmoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-22_2027-01-02": {"dep": "2026-12-22", "ret": "2027-01-02", "nights": 11, "price": 3399, "outLegs": [{"airline": "UA", "airlineName": "United", "from": "MEL", "to": "LAX", "dep": "2026-12-22T11:30:00", "arr": "2026-12-22T06:55:00"}, {"airline": "UA", "airlineName": "United", "from": "LAX", "to": "HNL", "dep": "2026-12-22T09:00:00", "arr": "2026-12-22T13:06:00"}], "outLayovers": [{"min": 125, "at": "LAX"}], "outDuration": 1356, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjJqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wMmoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-23_2027-01-02": {"dep": "2026-12-23", "ret": "2027-01-02", "nights": 10, "price": 2849, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-23T16:00:00", "arr": "2026-12-23T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-23T20:10:00", "arr": "2026-12-23T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjNqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wMmoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-24_2027-01-02": {"dep": "2026-12-24", "ret": "2027-01-02", "nights": 9, "price": 2503, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-24T16:00:00", "arr": "2026-12-24T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-24T20:10:00", "arr": "2026-12-24T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjRqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wMmoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-21_2027-01-03": {"dep": "2026-12-21", "ret": "2027-01-03", "nights": 13, "price": 2600, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-21T16:00:00", "arr": "2026-12-21T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-21T20:10:00", "arr": "2026-12-21T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjFqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wM2oHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-22_2027-01-03": {"dep": "2026-12-22", "ret": "2027-01-03", "nights": 12, "price": 4096, "outLegs": [{"airline": "NZ", "airlineName": "Air New Zealand", "from": "MEL", "to": "AKL", "dep": "2026-12-22T15:00:00", "arr": "2026-12-22T20:35:00"}, {"airline": "NZ", "airlineName": "Air New Zealand", "from": "AKL", "to": "HNL", "dep": "2026-12-22T22:10:00", "arr": "2026-12-22T07:40:00"}], "outLayovers": [{"min": 95, "at": "AKL"}], "outDuration": 820, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjJqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wM2oHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-23_2027-01-03": {"dep": "2026-12-23", "ret": "2027-01-03", "nights": 11, "price": 2708, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-23T16:00:00", "arr": "2026-12-23T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-23T20:10:00", "arr": "2026-12-23T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjNqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wM2oHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-24_2027-01-03": {"dep": "2026-12-24", "ret": "2027-01-03", "nights": 10, "price": 2503, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-24T16:00:00", "arr": "2026-12-24T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-24T20:10:00", "arr": "2026-12-24T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjRqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wM2oHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-25_2027-01-03": {"dep": "2026-12-25", "ret": "2027-01-03", "nights": 9, "price": 3811, "outLegs": [{"airline": "UA", "airlineName": "United", "from": "MEL", "to": "LAX", "dep": "2026-12-25T11:30:00", "arr": "2026-12-25T06:55:00"}, {"airline": "UA", "airlineName": "United", "from": "LAX", "to": "HNL", "dep": "2026-12-25T09:00:00", "arr": "2026-12-25T13:06:00"}], "outLayovers": [{"min": 125, "at": "LAX"}], "outDuration": 1356, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjVqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wM2oHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-21_2027-01-04": {"dep": "2026-12-21", "ret": "2027-01-04", "nights": 14, "price": 2491, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-21T16:00:00", "arr": "2026-12-21T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-21T20:10:00", "arr": "2026-12-21T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjFqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wNGoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-22_2027-01-04": {"dep": "2026-12-22", "ret": "2027-01-04", "nights": 13, "price": 3361, "outLegs": [{"airline": "UA", "airlineName": "United", "from": "MEL", "to": "SFO", "dep": "2026-12-22T12:45:00", "arr": "2026-12-22T08:10:00"}, {"airline": "UA", "airlineName": "United", "from": "SFO", "to": "HNL", "dep": "2026-12-22T09:30:00", "arr": "2026-12-22T13:13:00"}], "outLayovers": [{"min": 80, "at": "SFO"}], "outDuration": 1288, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjJqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wNGoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-23_2027-01-04": {"dep": "2026-12-23", "ret": "2027-01-04", "nights": 12, "price": 2491, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-23T16:00:00", "arr": "2026-12-23T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-23T20:10:00", "arr": "2026-12-23T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjNqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wNGoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-24_2027-01-04": {"dep": "2026-12-24", "ret": "2027-01-04", "nights": 11, "price": 2394, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-24T16:00:00", "arr": "2026-12-24T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-24T20:10:00", "arr": "2026-12-24T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjRqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wNGoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-25_2027-01-04": {"dep": "2026-12-25", "ret": "2027-01-04", "nights": 10, "price": 2791, "outLegs": [{"airline": "UA", "airlineName": "United", "from": "MEL", "to": "LAX", "dep": "2026-12-25T11:30:00", "arr": "2026-12-25T06:55:00"}, {"airline": "UA", "airlineName": "United", "from": "LAX", "to": "HNL", "dep": "2026-12-25T09:00:00", "arr": "2026-12-25T13:06:00"}], "outLayovers": [{"min": 125, "at": "LAX"}], "outDuration": 1356, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjVqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wNGoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-26_2027-01-04": {"dep": "2026-12-26", "ret": "2027-01-04", "nights": 9, "price": 2740, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-26T16:00:00", "arr": "2026-12-26T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-26T20:10:00", "arr": "2026-12-26T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjZqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wNGoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-21_2027-01-05": {"dep": "2026-12-21", "ret": "2027-01-05", "nights": 15, "price": 3361, "outLegs": [{"airline": "UA", "airlineName": "United", "from": "MEL", "to": "SFO", "dep": "2026-12-21T12:45:00", "arr": "2026-12-21T08:10:00"}, {"airline": "UA", "airlineName": "United", "from": "SFO", "to": "HNL", "dep": "2026-12-21T09:30:00", "arr": "2026-12-21T13:13:00"}], "outLayovers": [{"min": 80, "at": "SFO"}], "outDuration": 1288, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjFqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wNWoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-22_2027-01-05": {"dep": "2026-12-22", "ret": "2027-01-05", "nights": 14, "price": 3361, "outLegs": [{"airline": "UA", "airlineName": "United", "from": "MEL", "to": "SFO", "dep": "2026-12-22T12:45:00", "arr": "2026-12-22T08:10:00"}, {"airline": "UA", "airlineName": "United", "from": "SFO", "to": "HNL", "dep": "2026-12-22T09:30:00", "arr": "2026-12-22T13:13:00"}], "outLayovers": [{"min": 80, "at": "SFO"}], "outDuration": 1288, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjJqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wNWoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-23_2027-01-05": {"dep": "2026-12-23", "ret": "2027-01-05", "nights": 13, "price": 3361, "outLegs": [{"airline": "UA", "airlineName": "United", "from": "MEL", "to": "LAX", "dep": "2026-12-23T11:30:00", "arr": "2026-12-23T06:55:00"}, {"airline": "UA", "airlineName": "United", "from": "LAX", "to": "HNL", "dep": "2026-12-23T09:00:00", "arr": "2026-12-23T13:06:00"}], "outLayovers": [{"min": 125, "at": "LAX"}], "outDuration": 1356, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjNqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wNWoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-24_2027-01-05": {"dep": "2026-12-24", "ret": "2027-01-05", "nights": 12, "price": 3233, "outLegs": [{"airline": "UA", "airlineName": "United", "from": "MEL", "to": "SFO", "dep": "2026-12-24T12:45:00", "arr": "2026-12-24T08:10:00"}, {"airline": "UA", "airlineName": "United", "from": "SFO", "to": "HNL", "dep": "2026-12-24T09:30:00", "arr": "2026-12-24T13:13:00"}], "outLayovers": [{"min": 80, "at": "SFO"}], "outDuration": 1288, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjRqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wNWoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-25_2027-01-05": {"dep": "2026-12-25", "ret": "2027-01-05", "nights": 11, "price": 2791, "outLegs": [{"airline": "UA", "airlineName": "United", "from": "MEL", "to": "LAX", "dep": "2026-12-25T11:30:00", "arr": "2026-12-25T06:55:00"}, {"airline": "UA", "airlineName": "United", "from": "LAX", "to": "HNL", "dep": "2026-12-25T09:00:00", "arr": "2026-12-25T13:06:00"}], "outLayovers": [{"min": 125, "at": "LAX"}], "outDuration": 1356, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjVqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wNWoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-26_2027-01-05": {"dep": "2026-12-26", "ret": "2027-01-05", "nights": 10, "price": 3365, "outLegs": [{"airline": "UA", "airlineName": "United", "from": "MEL", "to": "SFO", "dep": "2026-12-26T12:45:00", "arr": "2026-12-26T08:10:00"}, {"airline": "UA", "airlineName": "United", "from": "SFO", "to": "HNL", "dep": "2026-12-26T09:30:00", "arr": "2026-12-26T13:13:00"}], "outLayovers": [{"min": 80, "at": "SFO"}], "outDuration": 1288, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjZqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wNWoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-21_2027-01-06": {"dep": "2026-12-21", "ret": "2027-01-06", "nights": 16, "price": 2600, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-21T16:00:00", "arr": "2026-12-21T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-21T20:10:00", "arr": "2026-12-21T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjFqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wNmoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-22_2027-01-06": {"dep": "2026-12-22", "ret": "2027-01-06", "nights": 15, "price": 3062, "outLegs": [{"airline": "UA", "airlineName": "United", "from": "MEL", "to": "LAX", "dep": "2026-12-22T11:30:00", "arr": "2026-12-22T06:55:00"}, {"airline": "UA", "airlineName": "United", "from": "LAX", "to": "HNL", "dep": "2026-12-22T09:00:00", "arr": "2026-12-22T13:06:00"}], "outLayovers": [{"min": 125, "at": "LAX"}], "outDuration": 1356, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjJqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wNmoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-23_2027-01-06": {"dep": "2026-12-23", "ret": "2027-01-06", "nights": 14, "price": 2849, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-23T16:00:00", "arr": "2026-12-23T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-23T20:10:00", "arr": "2026-12-23T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjNqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wNmoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-24_2027-01-06": {"dep": "2026-12-24", "ret": "2027-01-06", "nights": 13, "price": 2643, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-24T16:00:00", "arr": "2026-12-24T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-24T20:10:00", "arr": "2026-12-24T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjRqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wNmoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-25_2027-01-06": {"dep": "2026-12-25", "ret": "2027-01-06", "nights": 12, "price": 2746, "outLegs": [{"airline": "UA", "airlineName": "United", "from": "MEL", "to": "LAX", "dep": "2026-12-25T11:30:00", "arr": "2026-12-25T06:55:00"}, {"airline": "UA", "airlineName": "United", "from": "LAX", "to": "HNL", "dep": "2026-12-25T09:00:00", "arr": "2026-12-25T13:06:00"}], "outLayovers": [{"min": 125, "at": "LAX"}], "outDuration": 1356, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjVqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wNmoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-26_2027-01-06": {"dep": "2026-12-26", "ret": "2027-01-06", "nights": 11, "price": 2989, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-26T16:00:00", "arr": "2026-12-26T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-26T20:10:00", "arr": "2026-12-26T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjZqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wNmoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-21_2027-01-07": {"dep": "2026-12-21", "ret": "2027-01-07", "nights": 17, "price": 2600, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-21T16:00:00", "arr": "2026-12-21T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-21T20:10:00", "arr": "2026-12-21T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjFqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wN2oHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-22_2027-01-07": {"dep": "2026-12-22", "ret": "2027-01-07", "nights": 16, "price": 3415, "outLegs": [{"airline": "UA", "airlineName": "United", "from": "MEL", "to": "LAX", "dep": "2026-12-22T11:30:00", "arr": "2026-12-22T06:55:00"}, {"airline": "UA", "airlineName": "United", "from": "LAX", "to": "HNL", "dep": "2026-12-22T09:00:00", "arr": "2026-12-22T13:06:00"}], "outLayovers": [{"min": 125, "at": "LAX"}], "outDuration": 1356, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjJqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wN2oHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-23_2027-01-07": {"dep": "2026-12-23", "ret": "2027-01-07", "nights": 15, "price": 2708, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-23T16:00:00", "arr": "2026-12-23T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-23T20:10:00", "arr": "2026-12-23T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjNqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wN2oHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-24_2027-01-07": {"dep": "2026-12-24", "ret": "2027-01-07", "nights": 14, "price": 2503, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-24T16:00:00", "arr": "2026-12-24T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-24T20:10:00", "arr": "2026-12-24T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjRqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wN2oHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-25_2027-01-07": {"dep": "2026-12-25", "ret": "2027-01-07", "nights": 13, "price": 2866, "outLegs": [{"airline": "UA", "airlineName": "United", "from": "MEL", "to": "LAX", "dep": "2026-12-25T11:30:00", "arr": "2026-12-25T06:55:00"}, {"airline": "UA", "airlineName": "United", "from": "LAX", "to": "HNL", "dep": "2026-12-25T09:00:00", "arr": "2026-12-25T13:06:00"}], "outLayovers": [{"min": 125, "at": "LAX"}], "outDuration": 1356, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjVqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wN2oHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-26_2027-01-07": {"dep": "2026-12-26", "ret": "2027-01-07", "nights": 12, "price": 2849, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-26T16:00:00", "arr": "2026-12-26T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-26T20:10:00", "arr": "2026-12-26T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjZqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wN2oHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-21_2027-01-08": {"dep": "2026-12-21", "ret": "2027-01-08", "nights": 18, "price": 2491, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-21T16:00:00", "arr": "2026-12-21T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-21T20:10:00", "arr": "2026-12-21T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjFqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wOGoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-23_2027-01-08": {"dep": "2026-12-23", "ret": "2027-01-08", "nights": 16, "price": 2708, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-23T16:00:00", "arr": "2026-12-23T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-23T20:10:00", "arr": "2026-12-23T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjNqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wOGoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-24_2027-01-08": {"dep": "2026-12-24", "ret": "2027-01-08", "nights": 15, "price": 2503, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-24T16:00:00", "arr": "2026-12-24T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-24T20:10:00", "arr": "2026-12-24T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjRqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wOGoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-25_2027-01-08": {"dep": "2026-12-25", "ret": "2027-01-08", "nights": 14, "price": 2866, "outLegs": [{"airline": "UA", "airlineName": "United", "from": "MEL", "to": "LAX", "dep": "2026-12-25T11:30:00", "arr": "2026-12-25T06:55:00"}, {"airline": "UA", "airlineName": "United", "from": "LAX", "to": "HNL", "dep": "2026-12-25T09:00:00", "arr": "2026-12-25T13:06:00"}], "outLayovers": [{"min": 125, "at": "LAX"}], "outDuration": 1356, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjVqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wOGoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}, "2026-12-26_2027-01-08": {"dep": "2026-12-26", "ret": "2027-01-08", "nights": 13, "price": 2849, "outLegs": [{"airline": "QF", "airlineName": "Qantas", "from": "MEL", "to": "SYD", "dep": "2026-12-26T16:00:00", "arr": "2026-12-26T17:30:00"}, {"airline": "QF", "airlineName": "Qantas", "from": "SYD", "to": "HNL", "dep": "2026-12-26T20:10:00", "arr": "2026-12-26T09:00:00"}], "outLayovers": [{"min": 160, "at": "SYD"}], "outDuration": 840, "google": "https://www.google.com/travel/flights/search?tfs=Gh4SCjIwMjYtMTItMjZqBwgBEgNNRUxyBwgBEgNITkwaHhIKMjAyNy0wMS0wOGoHCAESA0hOTHIHCAESA01FTEABSAGYAQE&curr=USD&hl=en"}}, "returns": {"2027-01-01": [{"carriers": "UA", "legs": [{"airline": "UA", "from": "HNL", "to": "SFO", "dep": "2027-01-01T14:40:00", "arr": "2027-01-01T21:49:00"}, {"airline": "UA", "from": "SFO", "to": "MEL", "dep": "2027-01-01T23:35:00", "arr": "2027-01-03T10:30:00"}], "layovers": [{"min": 106, "at": "SFO"}], "duration": 1370}, {"carriers": "JQ/QF", "legs": [{"airline": "QF", "from": "HNL", "to": "SYD", "dep": "2027-01-01T10:45:00", "arr": "2027-01-02T18:20:00"}, {"airline": "JQ", "from": "SYD", "to": "MEL", "dep": "2027-01-02T21:15:00", "arr": "2027-01-02T22:45:00"}], "layovers": [{"min": 175, "at": "SYD"}], "duration": 900}, {"carriers": "DL", "legs": [{"airline": "DL", "from": "HNL", "to": "LAX", "dep": "2027-01-01T12:45:00", "arr": "2027-01-01T20:17:00"}, {"airline": "DL", "from": "LAX", "to": "MEL", "dep": "2027-01-01T21:15:00", "arr": "2027-01-03T08:00:00"}], "layovers": [{"min": 58, "at": "LAX"}], "duration": 1335}, {"carriers": "JL/QF", "legs": [{"airline": "JL", "from": "HNL", "to": "NRT", "dep": "2027-01-01T12:20:00", "arr": "2027-01-02T16:45:00"}, {"airline": "QF", "from": "NRT", "to": "MEL", "dep": "2027-01-02T19:20:00", "arr": "2027-01-03T07:45:00"}], "layovers": [{"min": 155, "at": "NRT"}], "duration": 1345}], "2027-01-02": [{"carriers": "UA", "legs": [{"airline": "UA", "from": "HNL", "to": "SFO", "dep": "2027-01-02T14:40:00", "arr": "2027-01-02T21:49:00"}, {"airline": "UA", "from": "SFO", "to": "MEL", "dep": "2027-01-02T23:35:00", "arr": "2027-01-04T10:30:00"}], "layovers": [{"min": 106, "at": "SFO"}], "duration": 1370}, {"carriers": "DL", "legs": [{"airline": "DL", "from": "HNL", "to": "LAX", "dep": "2027-01-02T12:45:00", "arr": "2027-01-02T20:17:00"}, {"airline": "DL", "from": "LAX", "to": "MEL", "dep": "2027-01-02T21:15:00", "arr": "2027-01-04T08:00:00"}], "layovers": [{"min": 58, "at": "LAX"}], "duration": 1335}, {"carriers": "JQ/QF", "legs": [{"airline": "QF", "from": "HNL", "to": "SYD", "dep": "2027-01-02T10:45:00", "arr": "2027-01-03T18:20:00"}, {"airline": "JQ", "from": "SYD", "to": "MEL", "dep": "2027-01-03T21:15:00", "arr": "2027-01-03T22:45:00"}], "layovers": [{"min": 175, "at": "SYD"}], "duration": 900}], "2027-01-03": [{"carriers": "NZ", "legs": [{"airline": "NZ", "from": "HNL", "to": "AKL", "dep": "2027-01-03T09:30:00", "arr": "2027-01-04T17:25:00"}, {"airline": "NZ", "from": "AKL", "to": "MEL", "dep": "2027-01-04T19:20:00", "arr": "2027-01-04T21:30:00"}], "layovers": [{"min": 115, "at": "AKL"}], "duration": 900}, {"carriers": "DL", "legs": [{"airline": "DL", "from": "HNL", "to": "LAX", "dep": "2027-01-03T12:45:00", "arr": "2027-01-03T20:17:00"}, {"airline": "DL", "from": "LAX", "to": "MEL", "dep": "2027-01-03T21:15:00", "arr": "2027-01-05T08:00:00"}], "layovers": [{"min": 58, "at": "LAX"}], "duration": 1335}, {"carriers": "JQ/QF", "legs": [{"airline": "QF", "from": "HNL", "to": "SYD", "dep": "2027-01-03T10:45:00", "arr": "2027-01-04T18:20:00"}, {"airline": "JQ", "from": "SYD", "to": "MEL", "dep": "2027-01-04T21:15:00", "arr": "2027-01-04T22:45:00"}], "layovers": [{"min": 175, "at": "SYD"}], "duration": 900}, {"carriers": "UA", "legs": [{"airline": "UA", "from": "HNL", "to": "SFO", "dep": "2027-01-03T14:40:00", "arr": "2027-01-03T21:49:00"}, {"airline": "UA", "from": "SFO", "to": "MEL", "dep": "2027-01-03T23:35:00", "arr": "2027-01-05T10:30:00"}], "layovers": [{"min": 106, "at": "SFO"}], "duration": 1370}], "2027-01-04": [{"carriers": "UA", "legs": [{"airline": "UA", "from": "HNL", "to": "LAX", "dep": "2027-01-04T12:45:00", "arr": "2027-01-04T20:15:00"}, {"airline": "UA", "from": "LAX", "to": "MEL", "dep": "2027-01-04T22:35:00", "arr": "2027-01-06T09:30:00"}], "layovers": [{"min": 140, "at": "LAX"}], "duration": 1425}, {"carriers": "JQ/QF", "legs": [{"airline": "QF", "from": "HNL", "to": "SYD", "dep": "2027-01-04T10:45:00", "arr": "2027-01-05T18:20:00"}, {"airline": "JQ", "from": "SYD", "to": "MEL", "dep": "2027-01-05T21:15:00", "arr": "2027-01-05T22:45:00"}], "layovers": [{"min": 175, "at": "SYD"}], "duration": 900}, {"carriers": "DL", "legs": [{"airline": "DL", "from": "HNL", "to": "LAX", "dep": "2027-01-04T12:45:00", "arr": "2027-01-04T20:17:00"}, {"airline": "DL", "from": "LAX", "to": "MEL", "dep": "2027-01-04T21:15:00", "arr": "2027-01-06T08:00:00"}], "layovers": [{"min": 58, "at": "LAX"}], "duration": 1335}], "2027-01-05": [{"carriers": "NZ", "legs": [{"airline": "NZ", "from": "HNL", "to": "AKL", "dep": "2027-01-05T09:30:00", "arr": "2027-01-06T17:25:00"}, {"airline": "NZ", "from": "AKL", "to": "MEL", "dep": "2027-01-06T19:20:00", "arr": "2027-01-06T21:30:00"}], "layovers": [{"min": 115, "at": "AKL"}], "duration": 900}, {"carriers": "UA", "legs": [{"airline": "UA", "from": "HNL", "to": "LAX", "dep": "2027-01-05T12:45:00", "arr": "2027-01-05T20:13:00"}, {"airline": "UA", "from": "LAX", "to": "MEL", "dep": "2027-01-05T22:35:00", "arr": "2027-01-07T09:30:00"}], "layovers": [{"min": 142, "at": "LAX"}], "duration": 1425}, {"carriers": "DL", "legs": [{"airline": "DL", "from": "HNL", "to": "LAX", "dep": "2027-01-05T12:45:00", "arr": "2027-01-05T20:17:00"}, {"airline": "DL", "from": "LAX", "to": "MEL", "dep": "2027-01-05T21:15:00", "arr": "2027-01-07T08:00:00"}], "layovers": [{"min": 58, "at": "LAX"}], "duration": 1335}, {"carriers": "JL/QF", "legs": [{"airline": "JL", "from": "HNL", "to": "NRT", "dep": "2027-01-05T12:20:00", "arr": "2027-01-06T16:45:00"}, {"airline": "QF", "from": "NRT", "to": "MEL", "dep": "2027-01-06T19:20:00", "arr": "2027-01-07T07:45:00"}], "layovers": [{"min": 155, "at": "NRT"}], "duration": 1345}], "2027-01-06": [{"carriers": "UA", "legs": [{"airline": "UA", "from": "HNL", "to": "SFO", "dep": "2027-01-06T14:25:00", "arr": "2027-01-06T21:34:00"}, {"airline": "UA", "from": "SFO", "to": "MEL", "dep": "2027-01-06T23:35:00", "arr": "2027-01-08T10:30:00"}], "layovers": [{"min": 121, "at": "SFO"}], "duration": 1385}, {"carriers": "DL", "legs": [{"airline": "DL", "from": "HNL", "to": "LAX", "dep": "2027-01-06T12:45:00", "arr": "2027-01-06T20:17:00"}, {"airline": "DL", "from": "LAX", "to": "MEL", "dep": "2027-01-06T21:15:00", "arr": "2027-01-08T08:00:00"}], "layovers": [{"min": 58, "at": "LAX"}], "duration": 1335}, {"carriers": "JQ/QF", "legs": [{"airline": "QF", "from": "HNL", "to": "SYD", "dep": "2027-01-06T10:45:00", "arr": "2027-01-07T18:20:00"}, {"airline": "JQ", "from": "SYD", "to": "MEL", "dep": "2027-01-07T21:15:00", "arr": "2027-01-07T22:45:00"}], "layovers": [{"min": 175, "at": "SYD"}], "duration": 900}], "2027-01-07": [{"carriers": "NZ", "legs": [{"airline": "NZ", "from": "HNL", "to": "AKL", "dep": "2027-01-07T09:30:00", "arr": "2027-01-08T17:25:00"}, {"airline": "NZ", "from": "AKL", "to": "MEL", "dep": "2027-01-08T19:20:00", "arr": "2027-01-08T21:30:00"}], "layovers": [{"min": 115, "at": "AKL"}], "duration": 900}, {"carriers": "UA", "legs": [{"airline": "UA", "from": "HNL", "to": "SFO", "dep": "2027-01-07T14:25:00", "arr": "2027-01-07T21:34:00"}, {"airline": "UA", "from": "SFO", "to": "MEL", "dep": "2027-01-07T23:35:00", "arr": "2027-01-09T10:30:00"}], "layovers": [{"min": 121, "at": "SFO"}], "duration": 1385}, {"carriers": "DL", "legs": [{"airline": "DL", "from": "HNL", "to": "LAX", "dep": "2027-01-07T12:45:00", "arr": "2027-01-07T20:17:00"}, {"airline": "DL", "from": "LAX", "to": "MEL", "dep": "2027-01-07T21:15:00", "arr": "2027-01-09T08:00:00"}], "layovers": [{"min": 58, "at": "LAX"}], "duration": 1335}, {"carriers": "JQ/QF", "legs": [{"airline": "QF", "from": "HNL", "to": "SYD", "dep": "2027-01-07T10:45:00", "arr": "2027-01-08T18:20:00"}, {"airline": "JQ", "from": "SYD", "to": "MEL", "dep": "2027-01-08T21:15:00", "arr": "2027-01-08T22:45:00"}], "layovers": [{"min": 175, "at": "SYD"}], "duration": 900}], "2027-01-08": [{"carriers": "UA", "legs": [{"airline": "UA", "from": "HNL", "to": "LAX", "dep": "2027-01-08T12:45:00", "arr": "2027-01-08T20:13:00"}, {"airline": "UA", "from": "LAX", "to": "MEL", "dep": "2027-01-08T22:35:00", "arr": "2027-01-10T09:30:00"}], "layovers": [{"min": 142, "at": "LAX"}], "duration": 1425}, {"carriers": "DL", "legs": [{"airline": "DL", "from": "HNL", "to": "LAX", "dep": "2027-01-08T12:45:00", "arr": "2027-01-08T20:17:00"}, {"airline": "DL", "from": "LAX", "to": "MEL", "dep": "2027-01-08T21:15:00", "arr": "2027-01-10T08:00:00"}], "layovers": [{"min": 58, "at": "LAX"}], "duration": 1335}, {"carriers": "JQ/QF", "legs": [{"airline": "QF", "from": "HNL", "to": "SYD", "dep": "2027-01-08T10:45:00", "arr": "2027-01-09T18:20:00"}, {"airline": "JQ", "from": "SYD", "to": "MEL", "dep": "2027-01-09T21:15:00", "arr": "2027-01-09T22:45:00"}], "layovers": [{"min": 175, "at": "SYD"}], "duration": 900}, {"carriers": "JL/QF", "legs": [{"airline": "JL", "from": "HNL", "to": "NRT", "dep": "2027-01-08T12:20:00", "arr": "2027-01-09T16:45:00"}, {"airline": "QF", "from": "NRT", "to": "MEL", "dep": "2027-01-09T19:20:00", "arr": "2027-01-10T07:45:00"}], "layovers": [{"min": 155, "at": "NRT"}], "duration": 1345}]}, "meta": {"generated": "2026-08-12", "origin": "MEL", "dest": "HNL"}};
+const HOPS = {"out": {"2026-12-24": [{"date": "2026-12-24", "dep": "2026-12-24T08:05:00", "arr": "2026-12-24T08:55:00", "price": 155, "airline": "WN", "from": "HNL", "to": "OGG"}, {"date": "2026-12-24", "dep": "2026-12-24T09:50:00", "arr": "2026-12-24T10:35:00", "price": 164, "airline": "WN", "from": "HNL", "to": "OGG"}], "2026-12-25": [{"date": "2026-12-25", "dep": "2026-12-25T09:50:00", "arr": "2026-12-25T10:35:00", "price": 137, "airline": "WN", "from": "HNL", "to": "OGG"}, {"date": "2026-12-25", "dep": "2026-12-25T08:05:00", "arr": "2026-12-25T08:55:00", "price": 147, "airline": "WN", "from": "HNL", "to": "OGG"}], "2026-12-26": [{"date": "2026-12-26", "dep": "2026-12-26T08:05:00", "arr": "2026-12-26T08:55:00", "price": 262, "airline": "WN", "from": "HNL", "to": "OGG"}, {"date": "2026-12-26", "dep": "2026-12-26T09:50:00", "arr": "2026-12-26T10:35:00", "price": 262, "airline": "WN", "from": "HNL", "to": "OGG"}], "2026-12-27": [{"date": "2026-12-27", "dep": "2026-12-27T09:50:00", "arr": "2026-12-27T10:35:00", "price": 218, "airline": "WN", "from": "HNL", "to": "OGG"}, {"date": "2026-12-27", "dep": "2026-12-27T08:05:00", "arr": "2026-12-27T08:55:00", "price": 234, "airline": "WN", "from": "HNL", "to": "OGG"}], "2026-12-28": [{"date": "2026-12-28", "dep": "2026-12-28T09:50:00", "arr": "2026-12-28T10:35:00", "price": 206, "airline": "WN", "from": "HNL", "to": "OGG"}, {"date": "2026-12-28", "dep": "2026-12-28T08:05:00", "arr": "2026-12-28T08:55:00", "price": 218, "airline": "WN", "from": "HNL", "to": "OGG"}], "2026-12-29": [{"date": "2026-12-29", "dep": "2026-12-29T08:05:00", "arr": "2026-12-29T08:55:00", "price": 125, "airline": "WN", "from": "HNL", "to": "OGG"}, {"date": "2026-12-29", "dep": "2026-12-29T11:30:00", "arr": "2026-12-29T12:20:00", "price": 130, "airline": "WN", "from": "HNL", "to": "OGG"}], "2026-12-30": [{"date": "2026-12-30", "dep": "2026-12-30T08:05:00", "arr": "2026-12-30T08:55:00", "price": 206, "airline": "WN", "from": "HNL", "to": "OGG"}, {"date": "2026-12-30", "dep": "2026-12-30T09:50:00", "arr": "2026-12-30T10:35:00", "price": 206, "airline": "WN", "from": "HNL", "to": "OGG"}], "2026-12-31": [{"date": "2026-12-31", "dep": "2026-12-31T08:05:00", "arr": "2026-12-31T08:55:00", "price": 108, "airline": "WN", "from": "HNL", "to": "OGG"}, {"date": "2026-12-31", "dep": "2026-12-31T09:50:00", "arr": "2026-12-31T10:35:00", "price": 108, "airline": "WN", "from": "HNL", "to": "OGG"}], "2027-01-01": [{"date": "2027-01-01", "dep": "2027-01-01T09:50:00", "arr": "2027-01-01T10:35:00", "price": 170, "airline": "WN", "from": "HNL", "to": "OGG"}, {"date": "2027-01-01", "dep": "2027-01-01T08:05:00", "arr": "2027-01-01T08:55:00", "price": 206, "airline": "WN", "from": "HNL", "to": "OGG"}], "2027-01-02": [{"date": "2027-01-02", "dep": "2027-01-02T08:05:00", "arr": "2027-01-02T08:55:00", "price": 170, "airline": "WN", "from": "HNL", "to": "OGG"}, {"date": "2027-01-02", "dep": "2027-01-02T09:50:00", "arr": "2027-01-02T10:35:00", "price": 170, "airline": "WN", "from": "HNL", "to": "OGG"}], "2027-01-03": [{"date": "2027-01-03", "dep": "2027-01-03T09:50:00", "arr": "2027-01-03T10:35:00", "price": 170, "airline": "WN", "from": "HNL", "to": "OGG"}, {"date": "2027-01-03", "dep": "2027-01-03T08:05:00", "arr": "2027-01-03T08:55:00", "price": 206, "airline": "WN", "from": "HNL", "to": "OGG"}], "2027-01-04": [{"date": "2027-01-04", "dep": "2027-01-04T09:50:00", "arr": "2027-01-04T10:35:00", "price": 170, "airline": "WN", "from": "HNL", "to": "OGG"}, {"date": "2027-01-04", "dep": "2027-01-04T08:05:00", "arr": "2027-01-04T08:55:00", "price": 191, "airline": "WN", "from": "HNL", "to": "OGG"}], "2027-01-05": [{"date": "2027-01-05", "dep": "2027-01-05T08:05:00", "arr": "2027-01-05T08:55:00", "price": 87, "airline": "WN", "from": "HNL", "to": "OGG"}, {"date": "2027-01-05", "dep": "2027-01-05T09:50:00", "arr": "2027-01-05T10:35:00", "price": 87, "airline": "WN", "from": "HNL", "to": "OGG"}]}, "back": {"2027-01-01": [{"date": "2027-01-01", "dep": "2027-01-01T07:20:00", "arr": "2027-01-01T08:05:00", "price": 234, "airline": "WN", "from": "OGG", "to": "HNL"}, {"date": "2027-01-01", "dep": "2027-01-01T06:00:00", "arr": "2027-01-01T06:45:00", "price": 234, "airline": "WN", "from": "OGG", "to": "HNL"}], "2027-01-02": [{"date": "2027-01-02", "dep": "2027-01-02T07:20:00", "arr": "2027-01-02T08:05:00", "price": 248, "airline": "WN", "from": "OGG", "to": "HNL"}, {"date": "2027-01-02", "dep": "2027-01-02T06:00:00", "arr": "2027-01-02T06:45:00", "price": 218, "airline": "WN", "from": "OGG", "to": "HNL"}], "2027-01-03": [{"date": "2027-01-03", "dep": "2027-01-03T07:20:00", "arr": "2027-01-03T08:05:00", "price": 234, "airline": "WN", "from": "OGG", "to": "HNL"}], "2027-01-04": [{"date": "2027-01-04", "dep": "2027-01-04T07:20:00", "arr": "2027-01-04T08:05:00", "price": 234, "airline": "WN", "from": "OGG", "to": "HNL"}, {"date": "2027-01-04", "dep": "2027-01-04T06:00:00", "arr": "2027-01-04T06:45:00", "price": 218, "airline": "WN", "from": "OGG", "to": "HNL"}], "2027-01-05": [{"date": "2027-01-05", "dep": "2027-01-05T07:20:00", "arr": "2027-01-05T08:05:00", "price": 87, "airline": "WN", "from": "OGG", "to": "HNL"}, {"date": "2027-01-05", "dep": "2027-01-05T06:00:00", "arr": "2027-01-05T06:45:00", "price": 87, "airline": "WN", "from": "OGG", "to": "HNL"}], "2027-01-06": [{"date": "2027-01-06", "dep": "2027-01-06T07:20:00", "arr": "2027-01-06T08:05:00", "price": 87, "airline": "WN", "from": "OGG", "to": "HNL"}, {"date": "2027-01-06", "dep": "2027-01-06T06:00:00", "arr": "2027-01-06T06:45:00", "price": 87, "airline": "WN", "from": "OGG", "to": "HNL"}], "2027-01-07": [{"date": "2027-01-07", "dep": "2027-01-07T07:20:00", "arr": "2027-01-07T08:05:00", "price": 96, "airline": "WN", "from": "OGG", "to": "HNL"}, {"date": "2027-01-07", "dep": "2027-01-07T06:00:00", "arr": "2027-01-07T06:45:00", "price": 96, "airline": "WN", "from": "OGG", "to": "HNL"}], "2027-01-08": [{"date": "2027-01-08", "dep": "2027-01-08T07:20:00", "arr": "2027-01-08T08:05:00", "price": 104, "airline": "WN", "from": "OGG", "to": "HNL"}, {"date": "2027-01-08", "dep": "2027-01-08T06:00:00", "arr": "2027-01-08T06:45:00", "price": 104, "airline": "WN", "from": "OGG", "to": "HNL"}]}};
+
+// 4★+ indicative nightly rates (AUD, from live scan 12 Aug) — room, not pp
+const WAIKIKI = [
+  {name:'Shoreline Hotel Waikiki', stars:4, rating:4.1, ppn:240},
+  {name:'The Twin Fin Hotel', stars:4, rating:4.0, ppn:311},
+  {name:'Park Shore Waikiki', stars:4, rating:4.2, ppn:333},
+  {name:'Prince Waikiki', stars:4, rating:4.5, ppn:406},
+  {name:'ʻAlohilani Resort Waikiki Beach', stars:5, rating:4.1, ppn:472},
+  {name:'Waikiki Beach Marriott', stars:4, rating:4.3, ppn:475},
+  {name:'Hilton Hawaiian Village', stars:4, rating:4.2, ppn:528},
+];
+const MAUI = [
+  {name:'Royal Lahaina Resort & Bungalows', stars:4, rating:4.2, ppn:404},
+  {name:'Aston at The Whaler on Kāʻanapali', stars:4, rating:4.6, ppn:675},
+  {name:'AC Hotel by Marriott Wailea', stars:4, rating:4.3, ppn:881},
+  {name:'Hyatt Regency Maui', stars:4, rating:4.5, ppn:973},
+  {name:'Wailea Beach Resort · Marriott', stars:4, rating:4.6, ppn:1041},
+];
+const FEE_PAD = 1.20;
 
 const DEPS = ['2026-12-21','2026-12-22','2026-12-23','2026-12-24','2026-12-25','2026-12-26'];
 const RETS = ['2027-01-01','2027-01-02','2027-01-03','2027-01-04','2027-01-05','2027-01-06','2027-01-07','2027-01-08'];
 const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const dObj = s => new Date(s+'T00:00:00');
+const iso = d => d.toISOString().slice(0,10);
+const addDays = (s,n) => { const d=dObj(s); d.setDate(d.getDate()+n); return iso(d); };
 const fmtD = s => { const d=dObj(s); return `${DOW[d.getDay()]} ${d.getDate()} ${MON[d.getMonth()]}`; };
 const fmtT = ts => ts.slice(11,16);
 const fmtDur = m => `${Math.floor(m/60)}h ${String(Math.round(m%60)).padStart(2,'0')}m`;
+const money = n => 'A$'+Math.round(n).toLocaleString();
 
-// colour scale green -> yellow -> red
 const C0=[70,209,154], C1=[242,193,78], C2=[241,106,95];
 function lerp(a,b,t){return a+(b-a)*t}
 function colorFor(v,vmin,vmax){
@@ -174,10 +246,9 @@ function lum(rgb){const m=rgb.match(/\d+/g).map(Number);return (0.299*m[0]+0.587
 
 const prices = Object.values(DATA.cells).map(c=>c.price);
 const vmin=Math.min(...prices), vmax=Math.max(...prices);
-document.getElementById('legMin').textContent = 'A$'+vmin.toLocaleString()+' cheapest';
-document.getElementById('legMax').textContent = 'A$'+vmax.toLocaleString()+' priciest';
+document.getElementById('legMin').textContent = money(vmin)+' cheapest';
+document.getElementById('legMax').textContent = money(vmax)+' priciest';
 
-// rank top 3
 const ranked = Object.values(DATA.cells).slice().sort((a,b)=>a.price-b.price).slice(0,3);
 const rankOf = {}; ranked.forEach((c,i)=>{ rankOf[c.dep+'_'+c.ret]=i+1; });
 
@@ -221,19 +292,117 @@ function legHTML(legs, layovers){
 function pickReturn(retDate, outLegs){
   const opts = DATA.returns[retDate] || [];
   const outC = new Set(outLegs.map(l=>l.airline));
-  const hasQF = outC.has('QF');
-  if(hasQF){ const qf = opts.find(o=>o.carriers.includes('QF')); if(qf) return {opt:qf, matched:true}; }
+  if(outC.has('QF')){ const qf = opts.find(o=>o.carriers.includes('QF')); if(qf) return {opt:qf, matched:true}; }
   return {opt: opts[0], matched:false};
+}
+
+/* ---------- trip builder state ---------- */
+let cur = null;          // current cell
+let curSplit = null;     // null = Oahu only, else {wk, maui, hopOut, hopBack}
+let selWk = 2, selMaui = 0;   // hotel indexes
+
+function nyeLabel(wkNights, dep){
+  const nye = '2026-12-31';
+  const splitDate = addDays(dep, wkNights);
+  return (nye < splitDate) ? 'NYE in Waikiki' : 'NYE on Maui';
+}
+
+function splitOptions(c){
+  const opts=[{kind:'oahu', name:'Oahu only — all Waikiki', tag:'', wk:c.nights, maui:0}];
+  const n=c.nights;
+  const cands=[
+    {kind:'bal', name:'Balanced split', wk:Math.round(n/2)},
+    {kind:'wkheavy', name:'Waikiki-heavy', wk:n-4},
+    {kind:'mauiheavy', name:'Maui-heavy', wk:4},
+  ];
+  const seen=new Set();
+  for(const s of cands){
+    s.maui = n - s.wk;
+    if(s.wk<3 || s.maui<3) continue;
+    if(seen.has(s.wk)) continue; seen.add(s.wk);
+    const splitDate = addDays(c.dep, s.wk);
+    const ho = (HOPS.out[splitDate]||[])[0];
+    const hb = (HOPS.back[c.ret]||[])[0];
+    if(!ho || !hb) continue;
+    s.tag = nyeLabel(s.wk, c.dep);
+    s.hopOut = ho; s.hopBack = hb; s.splitDate = splitDate;
+    opts.push(s);
+  }
+  return opts;
+}
+
+function hopLine(h, dir){
+  return `${dir==='out'?'Waikiki → Maui':'Maui → HNL'} · ${fmtD(h.date)} ${fmtT(h.dep)}–${fmtT(h.arr)} · ${h.airline} nonstop`;
+}
+
+function renderSplits(){
+  const el=document.getElementById('mSplits');
+  const opts=splitOptions(cur);
+  el.innerHTML = opts.map((s,i)=>{
+    if(s.kind==='oahu'){
+      const sel = curSplit===null ? ' sel':'';
+      return `<button class="splitCard${sel}" data-i="${i}" data-kind="oahu">
+        <div class="row1"><span class="name">${s.name}</span><span class="price">included</span></div>
+        <div class="det">${s.wk} nights Waikiki · no island hops</div></button>`;
+    }
+    const sel = (curSplit && curSplit.wk===s.wk) ? ' sel':'';
+    const hopPP = s.hopOut.price + s.hopBack.price;
+    return `<button class="splitCard${sel}" data-i="${i}" data-kind="${s.kind}">
+      <div class="row1"><span class="name">${s.name} <span class="tag">· ${s.tag}</span></span><span class="price">+${money(hopPP)} pp</span></div>
+      <div class="det">${s.wk}n Waikiki + ${s.maui}n Maui<br>${hopLine(s.hopOut,'out')} · ${money(s.hopOut.price)} pp<br>${hopLine(s.hopBack,'back')} · ${money(s.hopBack.price)} pp</div>
+    </button>`;
+  }).join('');
+  el.querySelectorAll('.splitCard').forEach(b=>b.addEventListener('click',()=>{
+    const o=opts[+b.dataset.i];
+    curSplit = o.kind==='oahu' ? null : o;
+    document.getElementById('hotelWrap').style.display = curSplit ? 'block':'none';
+    if(curSplit){
+      document.getElementById('wkLbl').textContent = `Waikiki · ${curSplit.wk} nights`;
+      document.getElementById('mauiLbl').textContent = `Maui · ${curSplit.maui} nights`;
+      renderHotels();
+    }
+    renderSplits(); renderTotal();
+  }));
+}
+
+function renderHotels(){
+  const mk=(list,selIdx,isWk)=>list.map((h,i)=>{
+    const nts = isWk?curSplit.wk:curSplit.maui;
+    return `<button class="hotel${i===selIdx?' sel':''}" data-i="${i}" data-wk="${isWk?1:0}">
+      <div class="hn">${h.name} <span style="color:var(--dim);font-weight:400">${'★'.repeat(h.stars)}</span></div>
+      <div class="hd"><span>${h.rating} rating</span><span class="hp">${money(h.ppn)}/n · ${money(h.ppn*nts)}</span></div>
+    </button>`;
+  }).join('');
+  const wkEl=document.getElementById('mWk'), mauiEl=document.getElementById('mMaui');
+  wkEl.innerHTML=mk(WAIKIKI,selWk,true);
+  mauiEl.innerHTML=mk(MAUI,selMaui,false);
+  wkEl.querySelectorAll('.hotel').forEach(b=>b.addEventListener('click',()=>{selWk=+b.dataset.i;renderHotels();renderTotal();}));
+  mauiEl.querySelectorAll('.hotel').forEach(b=>b.addEventListener('click',()=>{selMaui=+b.dataset.i;renderHotels();renderTotal();}));
+}
+
+function renderTotal(){
+  let airPP = cur.price, parts=[`Flights ${money(cur.price*2)}`];
+  if(curSplit){
+    airPP += curSplit.hopOut.price + curSplit.hopBack.price;
+    parts.push(`hops ${money((curSplit.hopOut.price+curSplit.hopBack.price)*2)}`);
+    const hotel = (WAIKIKI[selWk].ppn*curSplit.wk + MAUI[selMaui].ppn*curSplit.maui) * FEE_PAD;
+    parts.push(`hotels ${money(hotel)}`);
+    document.getElementById('totL').textContent='Estimated trip · 2 adults';
+    document.getElementById('totV').textContent=money(airPP*2 + hotel);
+  }else{
+    document.getElementById('totL').textContent='Flights · 2 adults';
+    document.getElementById('totV').textContent=money(cur.price*2);
+  }
+  document.getElementById('totB').textContent = parts.join('  +  ');
 }
 
 const overlay=document.getElementById('overlay');
 function openModal(key){
   const c=DATA.cells[key]; if(!c) return;
-  document.getElementById('mEyebrow').textContent='Melbourne ⇄ Honolulu · return economy';
+  cur=c; curSplit=null;
+  document.getElementById('mEyebrow').textContent='Melbourne ⇄ Honolulu · return economy · 2 adults';
   document.getElementById('mTitle').textContent=`${fmtD(c.dep)} → ${fmtD(c.ret)}`;
-  document.getElementById('mNights').textContent=`${c.nights} nights in Hawaii`;
-  document.getElementById('mPP').textContent='A$'+c.price.toLocaleString();
-  document.getElementById('mCouple').textContent='A$'+(c.price*2).toLocaleString();
+  document.getElementById('mNights').textContent=`${c.nights} nights in Hawaii · ${money(c.price)} per person flights`;
   document.getElementById('mOutDate').textContent=fmtD(c.dep);
   document.getElementById('mOut').innerHTML=legHTML(c.outLegs,c.outLayovers);
   const {opt,matched}=pickReturn(c.ret,c.outLegs);
@@ -243,6 +412,8 @@ function openModal(key){
     : 'Best under-3h-layover option home that day — exact pairing chosen at booking:';
   document.getElementById('mRet').innerHTML = opt ? legHTML(opt.legs,opt.layovers) : '<div class="retNote">See live options via the link below.</div>';
   document.getElementById('mLink').href=c.google;
+  document.getElementById('hotelWrap').style.display='none';
+  renderSplits(); renderTotal();
   overlay.classList.add('open');
   document.body.style.overflow='hidden';
 }
